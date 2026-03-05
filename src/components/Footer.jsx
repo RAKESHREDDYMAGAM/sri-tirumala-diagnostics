@@ -12,7 +12,7 @@ export default function Footer() {
           {/* Clinic info */}
           <div>
             <img
-              src="/logo.png"
+              src={`${import.meta.env.BASE_URL}logo.png`}
               alt="Sri Tirumala Diagnostic Center"
               className="h-12 w-auto mb-3 object-contain"
             />

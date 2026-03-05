@@ -18,7 +18,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/logo.png"
+              src={`${import.meta.env.BASE_URL}logo.png`}
               alt="Sri Tirumala Diagnostic Center"
               className="h-12 w-auto object-contain"
             />
