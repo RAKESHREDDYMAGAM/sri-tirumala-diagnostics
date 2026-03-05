@@ -34,7 +34,7 @@ export default function Home() {
                 Call Now
               </a>
               <a
-                href="https://wa.me/9189781969411"
+                href="https://wa.me/918978196941"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
