@@ -1,9 +1,28 @@
 import { useState } from 'react'
-import { CheckCircle, Loader2 } from 'lucide-react'
+import { MessageCircle } from 'lucide-react'
 import { services } from '../data/services'
-import { FORMSPREE_FORM_ID } from '../config'
 
+const WHATSAPP_NUMBER = '918978196941'
 const testOptions = services.map((s) => ({ value: s.id, label: s.title }))
+
+function buildWhatsAppMessage(formData) {
+  const testLabel = testOptions.find((t) => t.value === formData.testType)?.label || formData.testType
+  const testTypeDisplay = formData.testTypeOther
+    ? `${testLabel || ''}${testLabel && formData.testTypeOther ? ' - ' : ''}${formData.testTypeOther}`
+    : testLabel
+
+  return `*New Test Booking - Sri Tirumala Diagnostic Center*
+
+*Name:* ${formData.fullName}
+*Phone:* ${formData.phone}
+*Email:* ${formData.email}
+*Address:* ${formData.address}
+*Test Type:* ${testTypeDisplay}
+*Preferred Date:* ${formData.preferredDate}
+*Home Visit:* ${formData.homeVisit ? 'Yes' : 'No'}
+
+_Please attach doctor's report/prescription in this chat if you have one._`.trim()
+}
 
 export default function BookTest() {
   const [formData, setFormData] = useState({
@@ -12,12 +31,10 @@ export default function BookTest() {
     email: '',
     address: '',
     testType: '',
+    testTypeOther: '',
     preferredDate: '',
     homeVisit: false,
   })
-  const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -25,110 +42,25 @@ export default function BookTest() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }))
-    setError(null)
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    setLoading(true)
-    setError(null)
-
-    const testLabel = testOptions.find((t) => t.value === formData.testType)?.label || formData.testType
-    const submittedAt = new Date().toLocaleString('en-IN', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    })
-
-    const payload = {
-      fullName: formData.fullName,
-      phone: formData.phone,
-      email: formData.email,
-      address: formData.address,
-      testType: testLabel,
-      preferredDate: formData.preferredDate,
-      homeVisit: formData.homeVisit ? 'Yes' : 'No',
-      submittedAt,
-      _subject: `New Test Booking - ${formData.fullName} (${submittedAt})`,
-    }
-
-    try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-
-      if (res.ok) {
-        setSubmitted(true)
-      } else {
-        setError('Something went wrong. Please try again or book via WhatsApp.')
-      }
-    } catch {
-      setError('Failed to send. Please try again or book via WhatsApp.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (submitted) {
-    return (
-      <div className="min-h-screen py-20">
-        <div className="max-w-lg mx-auto px-4 text-center">
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
-              <CheckCircle className="w-10 h-10 text-green-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Booking Request Received!
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Thank you for your booking. We will contact you shortly to confirm your 
-              appointment. For immediate assistance, you can reach us on WhatsApp.
-            </p>
-            <a
-              href="https://wa.me/918978196941"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors"
-            >
-              Chat on WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    )
+    const message = buildWhatsAppMessage(formData)
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank')
   }
 
   return (
     <div className="min-h-screen py-12 lg:py-20">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Book a Test</h1>
           <p className="text-gray-600">
-            Fill out the form below or book directly via WhatsApp
+            Fill in your details below. You&apos;ll be taken to WhatsApp to send your booking in one message. You can attach your doctor&apos;s report there too.
           </p>
         </div>
 
-        {/* WhatsApp booking button */}
-        <div className="mb-8 text-center">
-          <a
-            href="https://wa.me/918978196941"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all w-full sm:w-auto"
-          >
-            Quick Book via WhatsApp
-          </a>
-        </div>
-
-        {/* Form */}
         <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-gray-100">
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
-              {error}
-            </div>
-          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -174,7 +106,7 @@ export default function BookTest() {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-                placeholder="Enter your email (for sending reports)"
+                placeholder="For sending reports"
               />
             </div>
 
@@ -216,6 +148,21 @@ export default function BookTest() {
             </div>
 
             <div>
+              <label htmlFor="testTypeOther" className="block text-sm font-medium text-gray-700 mb-2">
+                Doctor&apos;s Suggestions / Prescription Details (Optional)
+              </label>
+              <input
+                type="text"
+                id="testTypeOther"
+                name="testTypeOther"
+                value={formData.testTypeOther}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
+                placeholder="Specific test names or prescription details"
+              />
+            </div>
+
+            <div>
               <label htmlFor="preferredDate" className="block text-sm font-medium text-gray-700 mb-2">
                 Preferred Date
               </label>
@@ -239,24 +186,23 @@ export default function BookTest() {
                 onChange={handleChange}
                 className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
-              <label htmlFor="homeCollection" className="text-sm font-medium text-gray-700">
-                Home Visit Available
+              <label htmlFor="homeVisit" className="text-sm font-medium text-gray-700">
+                Home Visit Required
               </label>
+            </div>
+
+            <div className="p-4 bg-green-50 rounded-xl border border-green-100">
+              <p className="text-sm text-gray-700 mb-2">
+                <strong>One step:</strong> Click below to open WhatsApp with all your details. Attach your doctor&apos;s report/prescription in the same chat, then send.
+              </p>
             </div>
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full py-4 bg-primary-600 hover:bg-primary-700 disabled:opacity-70 disabled:cursor-not-allowed text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
             >
-              {loading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Sending...
-                </>
-              ) : (
-                'Submit Booking'
-              )}
+              <MessageCircle className="w-6 h-6" />
+              Send via WhatsApp
             </button>
           </form>
         </div>

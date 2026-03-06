@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Phone, MessageCircle, ArrowRight } from 'lucide-react'
 import ServiceCard from '../components/ServiceCard'
+import LabGallery from '../components/LabGallery'
 import { services } from '../data/services'
 
 export default function Home() {
@@ -27,14 +28,14 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="tel:8978196941"
+                href="tel:89781969411"
                 className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <Phone size={22} />
                 Call Now
               </a>
               <a
-                href="https://wa.me/918978196941"
+                href="https://wa.me/9189781969411"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
@@ -46,6 +47,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Lab Gallery - First section after hero */}
+      <LabGallery />
 
       {/* Services Preview */}
       <section className="py-16 lg:py-24 bg-white">
@@ -78,7 +82,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-16 lg:py-24 bg-gray-50">
+      <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Us</h2>
@@ -104,7 +108,7 @@ export default function Home() {
       </section>
 
       {/* Home Visit Available */}
-      <section className="py-16 lg:py-24 bg-white">
+      <section className="py-16 lg:py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="flex-1">
