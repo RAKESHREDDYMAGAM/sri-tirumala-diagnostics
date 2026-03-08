@@ -3,6 +3,8 @@ import { Phone, MapPin } from 'lucide-react'
 const PHONE = '8978196941'
 const WHATSAPP_URL = 'https://wa.me/918978196941'
 const LOCATION = 'Cheriyal'
+const MAP_URL = 'https://www.google.com/maps/place/SRI+THIRUMALA+DIAGNOSTIC+CENTER/@17.9220938,78.9718904,21z'
+const MAP_EMBED_URL = 'https://www.google.com/maps?q=17.9220208,78.9720688&z=17&output=embed'
 
 export default function Contact() {
   return (
@@ -39,10 +41,15 @@ export default function Contact() {
 
                   <div>
                     <p className="text-sm font-medium text-gray-500 mb-2">Location</p>
-                    <div className="flex items-start gap-3 text-gray-800">
+                    <a
+                      href={MAP_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-start gap-3 text-gray-800 hover:text-primary-600 transition-colors"
+                    >
                       <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                      <span className="font-medium">{LOCATION}</span>
-                    </div>
+                      <span className="font-medium">{LOCATION} — View on Google Maps</span>
+                    </a>
                   </div>
                 </div>
 
@@ -72,8 +79,8 @@ export default function Contact() {
               <div className="p-6 pt-4">
                 <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden">
                   <iframe
-                    title="Sri Tirumala Diagnostics Location"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3774.2434900409126!2d79.31356631490143!3d18.872698987167597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a334f1e63eae9d1%3A0x3e3dc1e74b95ce89!2sCheriyal%2C%20Telangana!5e0!3m2!1sen!2sin!4v1640000000000!5m2!1sen!2sin"
+                    title="Sri Tirumala Diagnostic Center Location"
+                    src={MAP_EMBED_URL}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
